@@ -1,3 +1,10 @@
+/*
+    puting elements in pairs based on element mod 10 and 100 - element in a priorty queue
+    and then loop check if i can increase an elment to be % by 10 and then increase it and count 
+    it as increasd
+
+*/
+
 #include <bits/stdc++.h>
 #include <fstream>
 
