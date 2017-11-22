@@ -1,3 +1,8 @@
+/*
+first sort the points so the second and third point are equal (comman point)
+and then print the diffrence of X and Y
+
+*/
 #include <bits/stdc++.h>
 #include <fstream>
 
