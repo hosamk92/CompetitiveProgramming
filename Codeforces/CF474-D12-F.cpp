@@ -7,19 +7,6 @@ typedef long double ld;
 
 using namespace std;
 
-int bs(vector <int> v,int i)
-{
-    int f=0,l=v.size()-1,m;
-    while(f<=l)
-    {
-        m=(f+l)/2;
-        if(v[m]==i)return m;
-        if(v[m]>i)l=m-1;
-        else f=m+1;
-    }
-    return f;
-}
-
 long long x,arr[100200]={},tree[400200]={};
 long long merge(long long t1,long long t2)
 {
