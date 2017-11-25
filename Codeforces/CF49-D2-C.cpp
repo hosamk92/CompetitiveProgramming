@@ -1,3 +1,7 @@
+/* 
+	put the last element in first and put the rest of the elements after it sorted in increasing order
+*/
+
 #include <bits/stdc++.h>
 #include <fstream>
 
