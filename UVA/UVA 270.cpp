@@ -78,29 +78,10 @@ int main()
         int a=0,b=0,j=0;
         bool c=0;
         int p[800][2]={};
-        while(1){
-            a=b=c=0;
-            getline(cin,x);
-            if(x[0]==0)break;
-            for(int i=0;i<x.size();i++){
-                if(x[i]==' '){
-                    c=1;
-                    continue;
-                }
-                if(!c)
-                {
-                    a*=10;
-                    a+=(x[i]-'0');
-                }
-                else
-                {
-                    b*=10;
-                    b+=(x[i]-'0');
-                }
-            }
-            p[j][0]=a;
-            p[j][1]=b;
-            j++;
+        while(getline(cin,x)){
+            if(x=="") break;
+            sscanf(x.c_str(),"%d %d",&p[j][0],&p[j][1]);
+            ++j;
         }
         int s,ans=0,k,z;
         for(int i=0;i<j;i++)
