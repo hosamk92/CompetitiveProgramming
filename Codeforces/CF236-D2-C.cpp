@@ -27,7 +27,7 @@ ll fast_pow(ll a,ll b,ll mod)
 	ans=(fast_pow(a,b/2,mod)%mod);
 	return ((ans*ans)%mod);
 }
-bool p[1000020]={};
+ll p[1000020]={};
 vector <ll>vec;
 ll lcm(ll a,ll b)
 {
@@ -41,32 +41,15 @@ int main()
     cin.tie(0);
 
     ll i,j;
-    map<ll,bool>m;
     int n;
     cin>>n;
-    for(i=2;i<=n;i++)
+    p[1]=1;
+    p[2]=2;
+    for(i=3;i<=n;i++)
     {
-        if(p[i]==0)
-        {
-            for(j=i;j<=n;j+=i)
-            {
-                p[j]=1;
-            }
-            if(m[j-i]==0){
-            vec.push_back(j-i);
-            m[j-i]=1;
-            }
-        }
+        p[i]=max(p[i-1],max(lcm(i,lcm(i-1,i-2)),lcm(i,lcm(i-1,i-3))));
     }
-    sort(vec.begin(),vec.end());
-   // for(i=0;i<vec.size();i++)cout<<vec[i]<<' ';
-    if(n<=1)cout<<n;
-    else
-    {
-        if(vec.size()==1)cout<<vec[0];
-        else if(vec.size()==2)cout<<lcm(vec[1],vec[0]);
-        else if(vec.size()>=3)cout<<lcm(vec[vec.size()-3],lcm(vec[vec.size()-1],vec[vec.size()-2]));
-    }
+    cout<<p[n];
 
     return 0;
 }
