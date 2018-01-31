@@ -27,66 +27,6 @@ ll fast_pow(ll a,ll b,ll mod)
 	ans=(fast_pow(a,b/2,mod)%mod);
 	return ((ans*ans)%mod);
 }
-int arr[10][10]={};
-vector<vector<pair<int,int> > > vec,vec2;
-void rec(int i,int j ,vector<pair<int,int> > v)
-{
-    if(v.size()==8)
-    {
-        vec.push_back(v);
-
-    }
-    if(i==9)return;
-    if(arr[i][j]==0)
-    {
-        for(int k=1;k<=8;k++)
-            arr[k][j]++;
-        for(int l=1;l<=8;l++)
-            arr[i][l]++;
-        arr[i][j]--;
-
-        for(int k=1;k<=8;k++)
-        {
-            if(i+k<=8&&j+k<=8)
-                arr[i+k][k+j]++;
-            if(i-k>=1&&j-k>=1)
-                arr[i-k][j-k]++;
-            if(i+k<=8&&j-k>=1)
-                arr[i+k][j-k]++;
-            if(i-k>=1&&j+k<=8)
-                arr[i-k][j+k]++;
-        }
-
-
-        v.push_back({i,j});
-        if(j==8)
-        rec(i+1,1,v);
-        else
-            rec(i,j+1,v);
-        v.pop_back();
-        for(int k=1;k<=8;k++)
-            arr[k][j]--;
-        for(int l=1;l<=8;l++)
-            arr[i][l]--;
-        arr[i][j]++;
-        for(int k=1;k<=8;k++)
-        {
-            if(i+k<=8&&j+k<=8)
-                arr[i+k][k+j]--;
-            if(i-k>=1&&j-k>=1)
-                arr[i-k][j-k]--;
-            if(i+k<=8&&j-k>=1)
-                arr[i+k][j-k]--;
-            if(i-k>=1&&j+k<=8)
-                arr[i-k][j+k]--;
-        }
-
-    }
-    if(j==8)
-    rec(i+1,1,v);
-    else
-        rec(i,j+1,v);
-}
 
 int main()
 {
