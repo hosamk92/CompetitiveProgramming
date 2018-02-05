@@ -19,45 +19,54 @@ ll fast_pow(ll a,ll b)
 	return ((ans*ans));
 }
 bool m[500][500]={};
-int dp[500][500],x;
-int mem(int a,int b)
+int w[500]={},w1[500]={};
+int x;
+int dij()
 {
-    if(a==x&&b==x)return 0;
-    int &ret=dp[a][b];
-    if(ret!=-1)return ret;
-    ret=1e8;
-    if(a==x)
+    priority_queue<pair<int,int> > p;
+    pair<int,int> pp;
+    p.push({600-0,1});
+    int s,i,j;
+    w[1]=0;
+    while(!p.empty())
     {
-        for(int i=2;i<=x;i++)
-            if(m[b][i])
-                ret=min(ret,mem(a,i)+1);
-    }
-    else if(b==x)
-    {
-        for(int i=2;i<=x;i++)
-            if(!m[a][i])
-                ret=min(ret,mem(i,b)+1);
-    }
-    else
-    {
-        for(int i=2;i<=x;i++){
-            if(!m[a][i]){
-                for(int j=2;j<=x;j++)
-                {
-                    if(i==j&&i!=x)continue;
-                    if(m[b][j])
-                        ret=min(ret,mem(i,j)+1);
-                }
+        pp=p.top();
+        p.pop();
+        s=600-pp.first; i=pp.second;
+   //     cout<<i<<' '<<s<<endl;
+        if(i==x)return s;
+
+        for(int k=1;k<=x;k++)
+            if(m[i][k]&&w[k]>s+1)
+            {
+                w[k]=s+1;
+                p.push({600-(s+1),k});
             }
-        }
-        for(int i=2;i<=x;i++)
-            if(!m[a][i])
-                ret=min(ret,mem(i,b)+1);
-        for(int i=2;i<=x;i++)
-            if(m[b][i])
-                ret=min(ret,mem(a,i)+1);
     }
-    return ret;
+    return w[x];
+}
+int dij1()
+{
+    priority_queue<pair<int,int> > p;
+    pair<int,int> pp;
+    p.push({600-0,1});
+    int s,i,j;
+    w1[1]=0;
+    while(!p.empty())
+    {
+        pp=p.top();
+        p.pop();
+        s=600-pp.first; i=pp.second;
+   //     cout<<s<<' '<<i<<endl;
+        if(i==x)return s;
+        for(int k=1;k<=x;k++)
+            if(!m[i][k]&&w1[k]>s+1)
+            {
+                w1[k]=s+1;
+                p.push({600-(s+1),k});
+            }
+    }
+    return w1[x];
 }
 
 int main()
@@ -67,7 +76,6 @@ int main()
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    memset(dp,-1,sizeof dp);
     int y,a,b;
     cin>>x>>y;
     for(int i=0;i<y;i++)
@@ -75,7 +83,10 @@ int main()
         cin>>a>>b;
         m[a][b]=m[b][a]=1;
     }
-    int ans=mem(1,1);
+    for(int i=1;i<=x;i++)
+            w[i]=w1[i]=1e8;
+    int ans=dij(),ans1=dij1();
+    ans=max(ans,ans1);
     if(ans==1e8)cout<<-1;
     else cout<<ans;
 
