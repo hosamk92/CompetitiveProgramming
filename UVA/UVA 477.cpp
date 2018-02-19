@@ -70,7 +70,7 @@ int main()
             }
             else
             {
-                if((X-a[j])*(X-a[j])+((Y-b[j])*(Y-b[j]))<=c[j]*c[j])
+                if((X-a[j])*(X-a[j])+((Y-b[j])*(Y-b[j]))<c[j]*c[j])
                 {
                     ch=1;
                     cout<<"Point "<<k<<" is contained in figure "<<j+1<<"\n";
