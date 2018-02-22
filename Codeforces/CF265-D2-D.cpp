@@ -1,3 +1,9 @@
+/// use seive to get all primes in all numbers 
+/// move on all numbers and for all their prime number in decrising way  
+/// arr[i]-p[i] till it reach 0 or we find ana the element in our array(sweep line which contain 1 for all elements in input array)
+/// get the max and add 1 to it for the current element and output the max of all elements
+
+
 #include <bits/stdc++.h>
 #include <fstream>
 
