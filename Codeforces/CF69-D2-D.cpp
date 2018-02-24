@@ -1,3 +1,6 @@
+/// dp with 3d first for x and second for y and 3rd for player
+/// add all vectors to our point till the distance become bigger 
+
 #include <bits/stdc++.h>
 #include <fstream>
 
@@ -7,54 +10,24 @@ typedef long double ld;
 
 using namespace std;
 
-int dp[500][500][2][2][2];
+int dp[500][500][2];
 int v[25]={},vy[25]={},d,n;
-int mem(int x,int y,int k,int m1,int m2)
+int dist(int x,int y){
+	return (x-250)*(x-250)+(y-250)*(y-250);
+}
+int mem(int x,int y,int k)
 {
-    double dis=x+y;
-  //  cout<<x<<' '<<y<<' '<<dis<<' '<<d<<endl;
-    int &ret=dp[x][y][k][m1][m2];
+    int dis=dist(x,y);
+    if(dis>d)return k;
+
+    int &ret=dp[x][y][k];
     if(ret!=-1)return ret;
     ret=!k;
-    if(dis>=d)
-    {
-        if(k&&m1)return 0;
-        if(!k&&m2)return 1;
-        if(k&&!m1)
-        {
-            ret=max(ret,mem(y,x,!k,1,m2));
-            if(ret)return ret;
-        }
-        else if(!k&&!m2)
-        {
-            ret=min(ret,mem(y,x,!k,m1,1));
-            if(!ret)return ret;
-        }
-        return ret;
-    }
-
-    for(int i=0;i<n;i++)
-    {
+    for(int i=0;i<n;i++){
         if(k)
-        {
-            ret=max(ret,mem(x+v[i],y+vy[i],!k,m1,m2));
-            if(ret)return ret;
-        }
+        ret=max(ret,mem(x+v[i],y+vy[i],!k));
         else
-        {
-            ret=min(ret,mem(x+v[i],y+vy[i],!k,m1,m2));
-            if(!ret)return ret;
-        }
-    }
-    if(k&&!m1)
-    {
-        ret=max(ret,mem(y,x,!k,1,m2));
-        if(ret)return ret;
-    }
-    else if(!k&&!m2)
-    {
-        ret=min(ret,mem(y,x,!k,m1,1));
-        if(!ret)return ret;
+            ret=min(ret,mem(x+v[i],y+vy[i],!k));
     }
     return ret;
 }
@@ -69,13 +42,15 @@ int main()
     memset(dp,-1,sizeof dp);
     int x,y;
     cin>>x>>y>>n>>d;
+    x+=250;
+    y+=250;
+    d=d*d;
     for(int i=0;i<n;i++)
         cin>>v[i]>>vy[i];
-    if(mem(x,y,1,0,0))
+    if(mem(x,y,1))
         cout<<"Anton";
     else
         cout<<"Dasha";
 
     return 0;
 }
-
