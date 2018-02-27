@@ -1,3 +1,7 @@
+/// keep moving left and see how far can you go right by using two pointers and do it the other way too
+/// keep moving right and see how far can you go left 
+/// and print the max
+
 #include <bits/stdc++.h>
 #include <fstream>
 
@@ -8,33 +12,6 @@ typedef long double ld;
 using namespace std;
 
 ll arr[500200]={},y,arr2[500200]={},x;
-ll bs(ll t,ll ee)
-{
-    ll f=1,e=ee-1,m;
-    if(t<arr[0]||e==0)return 0;
-    while(f<=e)
-    {
-        m=(f+e)/2;
-        if(arr[m]+(m*y)<=t&&(arr[m+1]+((m+1)*y)>t||m+1==e))return m;
-        if(arr[m]+(m*y)>t)e=m-1;
-        else f=m+1;
-    }
-    return m;
-}
-ll bs2(ll t,ll ee)
-{
-    ll f=ee+1,e=x-1,m;
-    if(t<arr2[x-1]||f==x)return x;
-    while(f<=e)
-    {
-        m=(f+e)/2;
-       // cout<<f<<' '<<e<<' '<<m<<endl;
-        if(arr2[m]+((x-m)*y)<=t&&(arr2[m-1]+((x-m+1)*y)>t||m-1==f))return m;
-        if(arr2[m]+((x-m)*y)>t)f=m+1;
-        else e=m-1;
-    }
-    return m;
-}
 
 int main()
 {
@@ -58,62 +35,93 @@ int main()
     {
         sum++;
         if(s[i]=='w')sum+=z;
-        arr2[i]=sum;
+        arr2[x-i]=sum;
     }
+    arr[x]=arr2[x]=1e10;
+    arr[0]=arr2[0]=-1e10;
     if(s[0]=='w'&&a<=z)cout<<0;
     else
     {
-        ll ans=1;
+        maxi=0;
+        ll ans=1,A,j=0;
         if(s[0]=='w')a-=z;
         a--;
-        ll A=a;
-        if(a-y<=0)cout<<ans;
-        else{
-            maxi=max(maxi,ans+bs(a-y,x));
-            for(int i=x-1,j=1;i>0;i--,j++)
+        A=a;
+        ll temp=0,t;
+        for(int i=1;i<=x;i++)
+        {
+            temp+=y;
+            if(arr[i]+temp>a)
             {
-                ans++;
-                a-=y;
-                if(s[i]=='w')a-=z;
-                a--;
-                if(a<0)
-                {
-                    maxi=max(maxi,ans-1);
-                    break;
-                }
-                if(a-(y*j)<0)
-                {
-                    maxi=max(ans,maxi);
-                    break;
-                }
-                maxi=max(maxi,ans+bs(a-(y*j),i));
+                t=temp-y;
+                j=i-1;
+                break;
             }
-            a=A;
-            ans=1;
-            for(int i=1,j=1;i<x;i++,j++)
-            {
-                ans++;
-                a-=y;
-                if(s[i]=='w')a-=z;
-                a--;
-                if(a<0)
-                {
-                    maxi=max(maxi,ans-1);
-                    break;
-                }
-                if(a-(y*j)<0)
-                {
-                    maxi=max(ans,maxi);
-                    break;
-                }
-             //   cout<<i<<' '<<a-(y*j)<<' '<<ans<<' '<<x-bs2(a-(y*j),i)<<'\n';
-                maxi=max(maxi,ans+(x-bs2(a-(y*j),i)));
-            }
-
-
-
-            cout<<maxi;
         }
+        maxi=max(maxi,ans+j);
+        for(int i=x-1,l=1;i>=1;i--,l++)
+        {
+            ans++;
+            a-=y;
+            if(s[i]=='w')a-=z;
+            a--;
+            if(a<0)
+            {
+                maxi=max(ans-1,maxi);
+                break;
+            }
+            for(int k=j;k>=0;k--)
+            {
+                if(k<i&&arr[k]+t<=a-(y*l))
+                {
+                    j=k;
+                    break;
+                }
+                t-=y;
+            }
+         //   cout<<ans<<' '<<j<<' '<<(a-(y*l))<<' '<<t<<endl;
+            maxi=max(maxi,ans+j);
+        }
+
+        a=A;
+        temp=0;
+        ans=1;
+        for(int i=1;i<=x;i++)
+        {
+            temp+=y;
+            if(arr2[i]+temp>a)
+            {
+                t=temp-y;
+                j=i-1;
+                break;
+            }
+        }
+        maxi=max(maxi,ans+j);
+        for(int i=1;i<x;i++)
+        {
+            ans++;
+            a-=y;
+            if(s[i]=='w')a-=z;
+            a--;
+            if(a<0)
+            {
+                maxi=max(ans-1,maxi);
+                break;
+            }
+            for(int k=j;k>=0;k--)
+            {
+                if(x-k>i&&arr2[k]+t<=a-(i*y))
+                {
+                    j=k;
+                    break;
+                }
+                t-=y;
+            }
+           // cout<<ans<<' '<<j<<endl;
+            maxi=max(maxi,ans+j);
+        }
+
+        cout<<maxi;
     }
 
 
