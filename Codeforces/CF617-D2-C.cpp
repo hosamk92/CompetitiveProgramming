@@ -1,3 +1,7 @@
+/// make 2 arrays and store in it the distance from the first fountain and the second
+/// move on the 2 arrays choose 1 of them as the radius of the first and make the second bigger to cover all distance
+/// print the min answer
+
 #include <bits/stdc++.h>
 #include <fstream>
 
