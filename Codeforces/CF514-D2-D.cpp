@@ -15,7 +15,7 @@ struct node
 {
     ll arr[7]={};
 };
-node a[100200],b[100200],ans[100200];
+node a[100200],b[100200][21],ans[100200],ttt[100200];
 
 node merge(node a1,node a2)
 {
@@ -27,32 +27,37 @@ node merge(node a1,node a2)
     else temp.arr[5]=a1.arr[5]+a2.arr[5];
     return temp;
 }
+ll vv=0;
 void rec(int kk,ll v)
 {
-    int k=0;
+    vv=v;
+    int k=kk;
     if(kk<0)return;
-    for(int i=0;i<=kk;i++)
+    for(int j=0;j<x;j++)
+        ttt[j]=ans[j];
+    for(int i=0;i<20;i++)
     {
         bool c=0;
         for(int j=0;j<=x-(1<<i)-v;j++)
         {
-            //cout<<j<<' '<<j+(1<<i)-1+v<<' '<<i<<' '<<v<<' ';
             if(i==0)
-                b[j]=merge(ans[j],a[j+v]);
+                b[j][20]=merge(ans[j],a[j+v]);
             else
-                b[j]=merge(b[j],b[j+(1<<i)+v-1]);
-            if(b[j].arr[5]!=0)c=1;
-           // cout<<b[j].arr[5]<<endl;
+                b[j][20]=merge(ans[j],b[j+(1<<i)+v][i-1]);
+            if(b[j][20].arr[5]!=0)c=1;
         }
         if(!c)
         {
             k=i-1;
             break;
         }
-        for(int j=0;j<=x-(1<<i);j++)
-            ans[j]=b[j];
+        for(int j=0;j<x;j++)
+            ttt[j]=b[j][20];
     }
-    rec(k-1,(1<<k)+v);
+    for(int j=0;j<x;j++)
+        ans[j]=ttt[j];
+
+    rec(k-1,(1<<k)+v-1);
 }
 int main()
 {
@@ -96,13 +101,13 @@ int main()
     for(int i=0;i<20;i++)
     {
         bool c=0;
-        for(int j=0;j<=x-(1<<i);j++)
+        for(int j=0;j<=x-(1<<i)-1;j++)
         {
             if(i==0)
-                b[j]=a[j];
+                b[j][i]=merge(a[j],a[j+1]);
             else
-                b[j]=merge(b[j],b[j+(1<<i)-1]);
-            if(b[j].arr[5]!=0)c=1;
+                b[j][i]=merge(b[j][i-1],b[j+(1<<i)][i-1]);
+            if(b[j][i].arr[5]!=0)c=1;
 
         }
         if(!c)
@@ -111,17 +116,17 @@ int main()
             break;
         }
         for(int j=0;j<=x-(1<<i);j++)
-            ans[j]=b[j];
+            ans[j]=b[j][i];
     }
-    rec(k-1,(1<<(k)));
+    rec(k-1,(1<<(k))-1);
     int l=0,maxi=0;;
-    for(int i=0;i<=x-(1<<k);i++){
-        if(ans[i].arr[5]>=maxi)
+    for(int i=0;i<=x;i++){
+        if(ans[i].arr[5]>maxi)
         {
             maxi=ans[i].arr[5];
             l=i;
         }
-   //     cout<<ans[i].arr[5]<<' '<<ans[i].arr[0]<<' '<<ans[i].arr[1]<<endl;
+    //    cout<<ans[i].arr[0]<<' '<<ans[i].arr[1]<<' '<<ans[i].arr[5]<<endl;
     }
     for(int j=0;j<y;j++)
         cout<<ans[l].arr[j]<<' ';
