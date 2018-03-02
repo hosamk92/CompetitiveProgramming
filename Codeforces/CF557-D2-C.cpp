@@ -1,3 +1,5 @@
+/// brute force solution however insted of checking which legs we would remove check which legs we would keep
+
 #include <bits/stdc++.h>
 #include <fstream>
 
