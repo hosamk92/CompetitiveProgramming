@@ -1,8 +1,10 @@
-/// use sparse table to get the ranges with max answer and print it
-
+/// using two pointers 
+/// and segment tree to check the range cost
 
 #include <bits/stdc++.h>
 #include <fstream>
+#include <cfloat>
+
 
 typedef long long ll;
 typedef unsigned long long ull;
@@ -10,125 +12,100 @@ typedef long double ld;
 
 using namespace std;
 
+double Fib(double x,double z);
+string BinDec(ull x);
+string StringInt(ll x);
+ull StringInt(string x);
+ull BinDec (string x);
+ull POWMOD (ull x,ull y,ull mod);
+ull POWE(long long , long long);
+
+ll fast_pow(ll a,ll b,ll mod)
+{
+	if(b==0)
+		return 1ll;
+	ll ans=1;
+	if(b%2)
+		return ans=(fast_pow(a,b-1,mod)*a)%mod;
+	ans=(fast_pow(a,b/2,mod)%mod);
+	return ((ans*ans)%mod);
+}
 ll x,y,z;
 struct node
 {
-    ll arr[7]={};
+    int a[6]={};
 };
-node a[100200],b[100200][21],ans[100200],ttt[100200];
-
-node merge(node a1,node a2)
+node merge(node x,node yy)
 {
-    node temp;
-    ll sum=0;
+    node tmp;
     for(int i=0;i<y;i++)
-        temp.arr[i]=max(a1.arr[i],a2.arr[i]),sum+=temp.arr[i];
-    if(sum>z)temp.arr[5]=0;
-    else temp.arr[5]=a1.arr[5]+a2.arr[5];
-    return temp;
+        tmp.a[i]=max(x.a[i],yy.a[i]);
+    return tmp;
 }
-ll vv=0;
-void rec(int kk,ll v)
-{
-    vv=v;
-    int k=kk;
-    if(kk<0)return;
-    for(int j=0;j<x;j++)
-        ttt[j]=ans[j];
-    for(int i=0;i<20;i++)
-    {
-        bool c=0;
-        for(int j=0;j<=x-(1<<i)-v;j++)
-        {
-            if(i==0)
-                b[j][20]=merge(ans[j],a[j+v]);
-            else
-                b[j][20]=merge(ans[j],b[j+(1<<i)+v][i-1]);
-            if(b[j][20].arr[5]!=0)c=1;
-        }
-        if(!c)
-        {
-            k=i-1;
-            break;
-        }
-        for(int j=0;j<x;j++)
-            ttt[j]=b[j][20];
-    }
-    for(int j=0;j<x;j++)
-        ans[j]=ttt[j];
+node tree[100100*4]={},arr[100100*4]={};
 
-    rec(k-1,(1<<k)+v-1);
+void build (int in ,int s,int e)
+{
+    if(s==e)
+    {
+        tree[in]=arr[s];
+        return ;
+    }
+    int m=(s+e)/2;
+    build(in*2,s,m);
+    build(in*2+1,m+1,e);
+    tree[in]=merge(tree[in*2],tree[in*2+1]);
 }
+node qur(int in ,int s,int e,int f,int l)
+{
+    node tmp;
+    if(s>l||f>e||s>e)return tmp;
+    if(s>=f&&l>=e)return tree[in];
+    int m=(s+e)/2;
+    return merge(qur(in*2,s,m,f,l),qur(in*2+1,m+1,e,f,l));
+}
+inline int getsum(node n)
+{
+    int sum=0;
+    for(int i=0;i<y;i++)
+        sum+=n.a[i];
+    return sum;
+}
+
 int main()
 {
-    // freopen("tshirts.in","r",stdin);
+   // freopen("tshirts.in","r",stdin);
     //freopen("game.out","w",stdout);
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int k;
-    node aa;
     cin>>x>>y>>z;
-    for(int i=0;i<x;i++){
-        ll sum=0;
-        for(int j=0;j<y;j++){
-            cin>>a[i].arr[j];
-            sum+=a[i].arr[j];
-        }
-        if(sum<=z)a[i].arr[5]=1;
+    for(int i=0;i<x;i++)
         for(int j=0;j<y;j++)
-            aa.arr[j]=max(aa.arr[j],a[i].arr[j]);
-    }
-    if(z==0)
+            cin>>arr[i].a[j];
+    build(1,0,x-1);
+    int j=0,ans=0;
+    node ans1;
+    for(int i=0;i<x;i++)
     {
-        cout<<0;
-        return 0;
-    }
-    {
-        int sum=0;
-        for(int j=0;j<y;j++)
+        for(;j<x;j++)
         {
-            sum+=aa.arr[j];
+            j=max(j,i);
+            node tmp=qur(1,0,x-1,i,j);
+            int sum=getsum(tmp);
+          //  cout<<sum<<' '<<i<<' '<<j<<endl;
+            if(sum>z)break;
+            if(j-i+1>ans)
+            {
+                ans1=tmp;
+                ans=j-i+1;
+            }
         }
-        if(sum<=z)
-        {
-            for(int j=0;j<y;j++)
-                cout<<aa.arr[j]<<' ';
-            return 0;
-        }
     }
-     k=0;
-    for(int i=0;i<20;i++)
-    {
-        bool c=0;
-        for(int j=0;j<=x-(1<<i)-1;j++)
-        {
-            if(i==0)
-                b[j][i]=merge(a[j],a[j+1]);
-            else
-                b[j][i]=merge(b[j][i-1],b[j+(1<<i)][i-1]);
-            if(b[j][i].arr[5]!=0)c=1;
+   // cout<<ans<<endl;
+    for(int i=0;i<y;i++)
+        cout<<ans1.a[i]<<' ';
 
-        }
-        if(!c)
-        {
-            k=i-1;
-            break;
-        }
-        for(int j=0;j<=x-(1<<i);j++)
-            ans[j]=b[j][i];
-    }
-    rec(k-1,(1<<(k))-1);
-    int l=0,maxi=0;;
-    for(int i=0;i<=x;i++){
-        if(ans[i].arr[5]>maxi)
-        {
-            maxi=ans[i].arr[5];
-            l=i;
-        }
-    //    cout<<ans[i].arr[0]<<' '<<ans[i].arr[1]<<' '<<ans[i].arr[5]<<endl;
-    }
-    for(int j=0;j<y;j++)
-        cout<<ans[l].arr[j]<<' ';
+
     return 0;
 }
