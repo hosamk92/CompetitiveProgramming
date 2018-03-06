@@ -76,6 +76,7 @@ ll qur(int in,int s,int e,int f,int l)
     return v;
 }
 bool p[100210]={};
+int S=0,SS=0;
 vector<int>v;
 vector<pair<int,int> > ans;
 pair<int,int> vv[100010]={};
@@ -97,14 +98,14 @@ void sort()
         }
         else if(k%2==0)
         {
-            ans.push_back({i+vv[k].first,j});
-            t=arr[i+vv[k].first];
-            up(1,0,x-1,i+vv[k].first,arr[j]);
+            ans.push_back({i+vv[k].second,j});
+            t=arr[i+vv[k].second];
+            up(1,0,x-1,i+vv[k].second,arr[j]);
             up(1,0,x-1,j,t);
-            ans.push_back({i+1,i+vv[k].first});
+            ans.push_back({i+1,i+vv[k].second});
             t=arr[i+1];
-            up(1,0,x-1,i+1,arr[i+vv[k].first]);
-            up(1,0,x-1,i+vv[k].first,t);
+            up(1,0,x-1,i+1,arr[i+vv[k].second]);
+            up(1,0,x-1,i+vv[k].second,t);
             ans.push_back({i,i+1});
             t=arr[i+1];
             up(1,0,x-1,i+1,arr[i]);
@@ -113,15 +114,16 @@ void sort()
         else
         {
             k++;
-            ans.push_back({i+vv[k].first,j});
-            t=arr[i+vv[k].first];
-            up(1,0,x-1,i+vv[k].first,arr[j]);
+            i--;
+            ans.push_back({i+vv[k].second,j});
+            t=arr[i+vv[k].second];
+            up(1,0,x-1,i+vv[k].second,arr[j]);
             up(1,0,x-1,j,t);
-            ans.push_back({i,i+vv[k].first});
-            t=arr[i];
-            up(1,0,x-1,i,arr[i+vv[k].first]);
-            up(1,0,x-1,i+vv[k].first,t);
-
+            ans.push_back({i+1,i+vv[k].second});
+            t=arr[i+1];
+            up(1,0,x-1,i+1,arr[i+vv[k].second]);
+            up(1,0,x-1,i+vv[k].second,t);
+            i++;
         }
        // break;
     }
@@ -162,9 +164,11 @@ int main()
     build(1,0,x-1);
     int j=0;
     sort();
+   
     cout<<ans.size()<<'\n';
     for(int i=0;i<ans.size();i++)
         cout<<ans[i].first+1<<' '<<ans[i].second+1<<'\n';;
 
     return 0;
 }
+
