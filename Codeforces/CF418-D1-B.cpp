@@ -27,7 +27,7 @@ ll fast_pow(ll a,ll b,ll mod)
 	ans=(fast_pow(a,b/2,mod)%mod);
 	return ((ans*ans)%mod);
 }
-ll x,y,z,a[200],b[200],c[200],arr[200]={},dp[(1<<21)-1],k,l;
+ll x,y,z,a[200],b[200],c[200],arr[200]={},dp[(1<<22)],k,l;
 map<int,int>m;
 vector<pair< pair<ll,ll> , pair<ll ,ll> > > v;
 
@@ -35,31 +35,19 @@ ll mini()
 {
     ull ans=1e19,xx;
     int msk=0;
-    for(auto it=m.begin();it!=m.end();it++)
+    for(int i=0;i<=(1<<21);i++)dp[i]=1e18;
+
+    dp[0]=0;
+    int size=1;
+    for(int i=0;i<x;i++)
     {
-        int ll=(it)->second;
-        l=ll;
-        memset(dp,-1,sizeof dp);
-        vector<int>vv;
-        vv.push_back(0);
-        dp[0]=0;
-        for(int i=0;i<=l;i++)
-        {
-            k=vv.size();
-            for(int j=0;j<k;j++){
-                msk=vv[j];
-                if(dp[msk|arr[i]]==-1)
-                {
-                    dp[msk|arr[i]]=dp[msk]+a[i];
-                    vv.push_back((msk|arr[i]));
-                }
-                else dp[msk|arr[i]]=min(dp[msk|arr[i]],dp[msk]+a[i]);
-            }
+        k=size;
+        for(int msk=0;msk<=(1<<21);msk++){
+            dp[msk|arr[i]]=min(dp[msk|arr[i]],dp[msk]+a[i]);
         }
         xx=dp[(1<<y)-1];
-//        cout<<mem(0)<<' '<<xx<<endl;
-        if(xx!=-1)
-        ans=min(ans,(ull)(z*b[ll])+xx);
+        if(xx!=1e18)
+        ans=min(ans,(ull)(z*b[i])+xx);
     }
     return ans;
 }
