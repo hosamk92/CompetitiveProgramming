@@ -1,4 +1,4 @@
-///trying add 1 person each time if i can't , i make team of 3 
+///try to add 1 person each time if i can't , i make team of 3 
 ///if at a time i the number of people is -ve then it's impossible
 /// otherwise we have the answer when we have n people in our vector
 #include <bits/stdc++.h>
@@ -34,7 +34,7 @@ ll fast_pow(ll a,ll b,ll mod)
 	return ((ans*ans)%mod);
 }
 
-vector<vector<int> > v(100200);
+vector<vector<int> > v(200200);
 vector<int>ans;
 int main()
 {
